@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -17,7 +18,7 @@ import org.hibernate.validator.constraints.*;
 
 public class Income   {
   @JsonProperty("id")
-  private String id;
+  private UUID id;
 
   @JsonProperty("name")
   private String name;
@@ -34,7 +35,7 @@ public class Income   {
   @JsonProperty("dateUpdated")
   private String dateUpdated;
 
-  public Income id(String id) {
+  public Income id(UUID id) {
     this.id = id;
     return this;
   }
@@ -43,14 +44,15 @@ public class Income   {
    * Get id
    * @return id
   */
-  @ApiModelProperty(example = "939e02dc-f268-4251-9cd2-6632a5221e64", value = "")
+  @ApiModelProperty(value = "")
 
-@Size(min=1) 
-  public String getId() {
+  @Valid
+
+  public UUID getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -124,7 +126,7 @@ public class Income   {
    * Get dateCreated
    * @return dateCreated
   */
-  @ApiModelProperty(example = "2020-10-31", value = "")
+  @ApiModelProperty(example = "2020-10-31T00:00:00Z", value = "")
 
 @Size(min=10) 
   public String getDateCreated() {
@@ -144,7 +146,7 @@ public class Income   {
    * Get dateUpdated
    * @return dateUpdated
   */
-  @ApiModelProperty(example = "2020-11-01", value = "")
+  @ApiModelProperty(example = "2020-11-01T00:00:00Z", value = "")
 
 @Size(min=10) 
   public String getDateUpdated() {

@@ -13,5 +13,5 @@ import com.majicode.budgetapp.entity.IncomeData;
 public interface IncomeRepository extends CrudRepository<IncomeData, UUID> {
 	Iterable<IncomeData> findIncomeByDateCreated(Date date);
 	
-	List<IncomeData> findByOrderByDateCreatedDesc();
+	List<IncomeData> findByOrderByDateCreatedAsc();
 }

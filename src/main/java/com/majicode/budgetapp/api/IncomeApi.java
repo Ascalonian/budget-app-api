@@ -7,6 +7,7 @@ package com.majicode.budgetapp.api;
 
 import com.majicode.budgetapp.model.Error;
 import com.majicode.budgetapp.model.Income;
+import java.util.UUID;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,12 +60,31 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * DELETE /income : Delete an Income
+     * Delete an existing Income from the budget
+     *
+     * @param incomeId Income id to delete (required)
+     * @return Income not found (status code 404)
+     */
+    @ApiOperation(value = "Delete an Income", nickname = "deleteIncome", notes = "Delete an existing Income from the budget", tags={ "income", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
+    @RequestMapping(value = "/income",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    default ResponseEntity<Void> deleteIncome(@ApiParam(value = "Income id to delete",required=true) @PathVariable("incomeId") UUID incomeId) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -90,7 +110,38 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /income/{incomeId} : Info for a specific Income
+     *
+     * @param incomeId The id of the income to retrieve (required)
+     * @return Expected response to a valid request (status code 200)
+     *         or Invalid ID provided (status code 400)
+     *         or Income not found (status code 404)
+     */
+    @ApiOperation(value = "Info for a specific Income", nickname = "findIncomeById", notes = "", response = Income.class, tags={ "income", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class),
+        @ApiResponse(code = 400, message = "Invalid ID provided", response = Error.class),
+        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
+    @RequestMapping(value = "/income/{incomeId}",
+        produces = { "application/json" }, 
+        method = RequestMethod.GET)
+    default ResponseEntity<Income> findIncomeById(@ApiParam(value = "The id of the income to retrieve",required=true) @PathVariable("incomeId") String incomeId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -120,34 +171,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-
-    /**
-     * GET /income/{incomeId} : Info for a specific Income
-     *
-     * @param incomeId The id of the income to retrieve (required)
-     * @return Expected response to a valid request (status code 200)
-     */
-    @ApiOperation(value = "Info for a specific Income", nickname = "showIncomeById", notes = "", response = Income.class, tags={ "income", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class) })
-    @RequestMapping(value = "/income/{incomeId}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
-    default ResponseEntity<Income> showIncomeById(@ApiParam(value = "The id of the income to retrieve",required=true) @PathVariable("incomeId") String incomeId) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -160,13 +184,14 @@ public interface IncomeApi {
 
     /**
      * PUT /income : Update an existing Income
+     * Update an existing Income
      *
      * @param income Income object that needs to be updated in the budget (required)
      * @return Invalid ID supplied (status code 400)
      *         or Income not found (status code 404)
      *         or Validation exception (status code 405)
      */
-    @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "", tags={ "income", })
+    @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "Update an existing Income", tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 400, message = "Invalid ID supplied", response = Error.class),
         @ApiResponse(code = 404, message = "Income not found", response = Error.class),
