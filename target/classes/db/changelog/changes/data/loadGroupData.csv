@@ -1,9 +1,0 @@
-id,name,type_id,color,date_created,date_updated
-1,Personal,1,RED,2020-05-01,2020-05-01
-2,Debt,2,GREEN,2020-05-01,2020-05-01
-3,Savings,3,BLUE,2020-05-01,2020-05-01
-4,Entertainment,1,BROWN,2020-05-03,2020-05-03
-5,Envelopes,4,RED,2020-05-03,2020-05-04
-6,Utilities,1,ORANGE,2020-05-04,2020-05-05
-7,Housing,1,RED,2020-05-05,2020-05-05
-8,Car,1,PURPLE,2020-05-06,2020-05-07
