@@ -1,9 +1,16 @@
 package com.majicode.budgetapp.api;
 
+import java.lang.invoke.MethodHandles;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,14 +25,6 @@ import com.majicode.budgetapp.util.DateUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
-
-import java.lang.invoke.MethodHandles;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Controller
 @Api(tags = {"income"})
@@ -48,7 +47,7 @@ public class IncomeApiController implements IncomeApi {
     }
     
     @Override
-    public ResponseEntity<InlineResponse200> createIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
+    public ResponseEntity<InlineResponse200> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
     	logger.info("Create income for {}", income.getName());
     	
     	logger.debug("Income data:");
@@ -75,7 +74,7 @@ public class IncomeApiController implements IncomeApi {
     }
 
     @Override
-    public ResponseEntity<Income> getIncomeByDate(@NotNull @ApiParam(value = "Date the income was created", required = true) @Valid @RequestParam(value = "date", required = true) String date) {
+    public ResponseEntity<Income> findIncomeByDate(@NotNull @ApiParam(value = "Date the income was created", required = true) @Valid @RequestParam(value = "date", required = true) String date) {
     	List<com.majicode.budgetapp.entity.Income> incomes = incomeService.getIncomeByDate(DateUtils.createDateFromDateString(date));
     	
     	System.out.println("Found " + incomes.size() + " results");

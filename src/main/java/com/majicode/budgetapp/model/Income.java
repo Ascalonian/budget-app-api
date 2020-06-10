@@ -34,9 +34,10 @@ public class Income   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "Pentagon paycheck", value = "")
+  @ApiModelProperty(example = "Pentagon paycheck", required = true, value = "")
+  @NotNull
 
-
+@Size(min=1) 
   public String getName() {
     return name;
   }
