@@ -128,7 +128,7 @@ public class Income   {
   */
   @ApiModelProperty(example = "2020-10-31T00:00:00Z", value = "")
 
-@Size(min=10) 
+
   public String getDateCreated() {
     return dateCreated;
   }
@@ -148,7 +148,7 @@ public class Income   {
   */
   @ApiModelProperty(example = "2020-11-01T00:00:00Z", value = "")
 
-@Size(min=10) 
+
   public String getDateUpdated() {
     return dateUpdated;
   }

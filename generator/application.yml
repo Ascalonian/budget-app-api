@@ -223,11 +223,9 @@ components:
                example: 3900.0
             dateCreated:
                type: string
-               minLength: 10
                example: 2020-10-31T00:00:00Z
             dateUpdated:
                type: string
-               minLength: 10
                example: 2020-11-01T00:00:00Z
       Error:
          description: Error message sent back
