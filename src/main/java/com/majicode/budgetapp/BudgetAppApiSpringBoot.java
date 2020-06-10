@@ -1,7 +1,5 @@
 package com.majicode.budgetapp;
 
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.databind.Module;
+
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -49,22 +49,22 @@ public class BudgetAppApiSpringBoot implements CommandLineRunner {
        return name;
     }
 
-//    @Bean
-//    public WebMvcConfigurer webConfigurer() {
-//        return new WebMvcConfigurer() {
-//            /*@Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("*")
-//                        .allowedMethods("*")
-//                        .allowedHeaders("Content-Type");
-//            }*/
-//        };
-//    }
-//
-//    @Bean
-//    public Module jsonNullableModule() {
-//        return new JsonNullableModule();
-//    }
+    @Bean
+    public WebMvcConfigurer webConfigurer() {
+        return new WebMvcConfigurer() {
+            /*@Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("*")
+                        .allowedHeaders("Content-Type");
+            }*/
+        };
+    }
+
+    @Bean
+    public Module jsonNullableModule() {
+        return new JsonNullableModule();
+    }
 
 }

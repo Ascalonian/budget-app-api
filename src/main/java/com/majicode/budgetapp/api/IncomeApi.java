@@ -5,32 +5,29 @@
  */
 package com.majicode.budgetapp.api;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
+import com.majicode.budgetapp.model.Error;
+import com.majicode.budgetapp.model.Income;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.majicode.budgetapp.model.Error;
-import com.majicode.budgetapp.model.Income;
-import com.majicode.budgetapp.model.InlineResponse200;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Validated
 @Api(value = "Income", description = "the Income API")
@@ -42,27 +39,27 @@ public interface IncomeApi {
 
     /**
      * POST /income : Add a new income to the budget
-     * adds a new Income for a specific amount on a given date
+     * Adds a new Income for a specific amount on a given date
      *
      * @param income Income object that needs to be added to the budget (required)
-     * @return Returns ApplicationInstanceUID (status code 200)
+     * @return Expected response to a valid request (status code 200)
      *         or Income information is invalid. (status code 400)
      *         or Invalid input (status code 405)
      */
-    @ApiOperation(value = "Add a new income to the budget", nickname = "addIncome", notes = "adds a new Income for a specific amount on a given date", response = InlineResponse200.class, tags={ "income", })
+    @ApiOperation(value = "Add a new income to the budget", nickname = "addIncome", notes = "Adds a new Income for a specific amount on a given date", response = Income.class, tags={ "income", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Returns ApplicationInstanceUID", response = InlineResponse200.class),
-        @ApiResponse(code = 400, message = "Income information is invalid.", response = String.class),
-        @ApiResponse(code = 405, message = "Invalid input") })
+        @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class),
+        @ApiResponse(code = 400, message = "Income information is invalid.", response = Error.class),
+        @ApiResponse(code = 405, message = "Invalid input", response = Error.class) })
     @RequestMapping(value = "/income",
-        produces = { "application/json", "text/plain" }, 
+        produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<InlineResponse200> addIncome(@ApiParam(value = "Income object that needs to be added to the budget" ,required=true )  @Valid @RequestBody Income income) {
+    default ResponseEntity<Income> addIncome(@ApiParam(value = "Income object that needs to be added to the budget" ,required=true )  @Valid @RequestBody Income income) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"income-id\" : \"income-id\" }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -84,8 +81,8 @@ public interface IncomeApi {
     @ApiOperation(value = "Find income by specific date", nickname = "findIncomeByDate", notes = "", response = Income.class, tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation", response = Income.class),
-        @ApiResponse(code = 400, message = "Invalid date provided"),
-        @ApiResponse(code = 404, message = "Income not found") })
+        @ApiResponse(code = 400, message = "Invalid date provided", response = Error.class),
+        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
     @RequestMapping(value = "/income/findByDate",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -93,7 +90,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Pentagon paycheck\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0 }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -108,22 +105,22 @@ public interface IncomeApi {
      * GET /income : List all Incomes
      * Retrieves the full list of all the Incomes in the budget app
      *
-     * @param limit How many items to return at one time (max 100) (optional)
+     * @param limit How many Incomes to return at one time (max 100) (optional, default to 0)
      * @return A list of Incomes (status code 200)
-     *         or unexpected error (status code 200)
+     *         or Unexpected error (status code 200)
      */
     @ApiOperation(value = "List all Incomes", nickname = "listIncomes", notes = "Retrieves the full list of all the Incomes in the budget app", response = Income.class, responseContainer = "List", tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "A list of Incomes", response = Income.class, responseContainer = "List"),
-        @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+        @ApiResponse(code = 200, message = "Unexpected error", response = Error.class) })
     @RequestMapping(value = "/income",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many items to return at one time (max 100)") @Valid @RequestParam(value = "limit", required = false) Optional<Integer> limit) {
+    default ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many Incomes to return at one time (max 100)", defaultValue = "0") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Pentagon paycheck\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0 }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -150,7 +147,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Pentagon paycheck\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0 }";
+                    String exampleString = "{ \"dateCreated\" : \"2020-10-31\", \"name\" : \"Pentagon paycheck\", \"id\" : \"939e02dc-f268-4251-9cd2-6632a5221e64\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -171,10 +168,11 @@ public interface IncomeApi {
      */
     @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "", tags={ "income", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 400, message = "Invalid ID supplied"),
-        @ApiResponse(code = 404, message = "Income not found"),
-        @ApiResponse(code = 405, message = "Validation exception") })
+        @ApiResponse(code = 400, message = "Invalid ID supplied", response = Error.class),
+        @ApiResponse(code = 404, message = "Income not found", response = Error.class),
+        @ApiResponse(code = 405, message = "Validation exception", response = Error.class) })
     @RequestMapping(value = "/income",
+        produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
     default ResponseEntity<Void> updateIncome(@ApiParam(value = "Income object that needs to be updated in the budget" ,required=true )  @Valid @RequestBody Income income) {

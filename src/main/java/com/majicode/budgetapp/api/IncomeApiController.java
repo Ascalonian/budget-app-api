@@ -1,6 +1,9 @@
 package com.majicode.budgetapp.api;
 
 import java.lang.invoke.MethodHandles;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import com.majicode.budgetapp.entity.IncomeData;
 import com.majicode.budgetapp.model.Income;
-import com.majicode.budgetapp.model.InlineResponse200;
 import com.majicode.budgetapp.service.IncomeService;
 import com.majicode.budgetapp.util.DateUtils;
 
@@ -47,7 +50,7 @@ public class IncomeApiController implements IncomeApi {
     }
     
     @Override
-    public ResponseEntity<InlineResponse200> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
+    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
     	logger.info("Create income for {}", income.getName());
     	
     	logger.debug("Income data:");
@@ -56,7 +59,7 @@ public class IncomeApiController implements IncomeApi {
     	logger.debug("Received Amount: ${}", income.getReceivedAmount());
     	
     	logger.trace("Converting the income types");
-    	final com.majicode.budgetapp.entity.Income savedIncome = new com.majicode.budgetapp.entity.Income();
+    	final IncomeData savedIncome = new IncomeData();
     	savedIncome.setName(income.getName());
     	savedIncome.setPlannedAmount(income.getPlannedAmount());
     	savedIncome.setReceivedAmount(income.getReceivedAmount());
@@ -64,21 +67,29 @@ public class IncomeApiController implements IncomeApi {
     	savedIncome.setDateUpdated(savedIncome.getDateCreated());
     	
     	logger.trace("Save the income");
-    	final Long savedIncomeId = incomeService.save(savedIncome);
+    	final String savedIncomeId = incomeService.save(savedIncome);
     	
-    	logger.trace("Set the return value");
-    	final InlineResponse200 response = new InlineResponse200();
-    	response.setIncomeId(String.valueOf(savedIncomeId));
+    	logger.debug("New Income ID: " + savedIncomeId);
     	
-    	return new ResponseEntity<InlineResponse200>(response, HttpStatus.OK);
+    	logger.trace("Convert the Income");
+    	final Income result = convert(savedIncome);
+    	
+    	return new ResponseEntity<Income>(result, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Income> findIncomeByDate(@NotNull @ApiParam(value = "Date the income was created", required = true) @Valid @RequestParam(value = "date", required = true) String date) {
-    	List<com.majicode.budgetapp.entity.Income> incomes = incomeService.getIncomeByDate(DateUtils.createDateFromDateString(date));
+    	logger.info(">>> findIncomeByDate");
     	
-    	System.out.println("Found " + incomes.size() + " results");
+    	logger.debug("Parameters:");
+    	logger.debug("Date: " + date);
     	
+    	logger.trace("Call getIncomeByDate");
+    	final List<IncomeData> incomes = incomeService.getIncomeByDate(DateUtils.createDateFromDateString(date));
+    	
+    	logger.info("Found " + incomes.size() + " results");
+    	
+    	logger.trace("Populate Income");
     	final Income income = new Income();
     	
     	if (incomes.isEmpty()) {
@@ -86,12 +97,56 @@ public class IncomeApiController implements IncomeApi {
 	    	income.setPlannedAmount(new Double("123.45"));
 	    	income.setReceivedAmount(new Double("12.34"));
     	} else {
-    		com.majicode.budgetapp.entity.Income majIncome = incomes.get(0);
+    		final IncomeData majIncome = incomes.get(0);
     		income.setName(majIncome.getName());
     		income.setPlannedAmount(majIncome.getPlannedAmount());
     		income.setReceivedAmount(majIncome.getReceivedAmount());
     	}
     	
+    	logger.debug("Income data:");
+    	logger.debug("Name: {}", income.getName());
+    	logger.debug("Planned Amount: ${}", income.getPlannedAmount());
+    	logger.debug("Received Amount: ${}", income.getReceivedAmount());
+    	
     	return new ResponseEntity<Income>(income, HttpStatus.OK);
+    }
+    
+    @Override
+    public ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many items to return at one time (max 100)") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
+//    	if (limit.isPresent()) {
+//    		final Pageable limitIncomes = PageRequest.of(0,limit.get());
+//    	}
+    	
+    	final List<IncomeData> fetchedIncomes = incomeService.getIncomes();
+    	
+    	final List<Income> incomes = convert(fetchedIncomes);
+    	
+    	return new ResponseEntity<List<Income>>(incomes, HttpStatus.OK);
+    }
+    
+    private Income convert(final IncomeData income) {
+    	final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
+    	
+    	final Income newIncome = new Income();
+    	newIncome.setId(income.getIncomeId().toString());
+		newIncome.setName(income.getName());
+		newIncome.setPlannedAmount(income.getPlannedAmount());
+		newIncome.setReceivedAmount(income.getReceivedAmount());
+		newIncome.setDateCreated(dateFormat.format(income.getDateCreated()));
+		newIncome.setDateUpdated(dateFormat.format(income.getDateUpdated()));
+		
+		return newIncome;
+    }
+    
+    private List<Income> convert(final List<IncomeData> incomes) {
+    	final List<Income> incomeList = new ArrayList<>();
+    	
+    	for (IncomeData income : incomes) {
+    		final Income newIncome = convert(income);
+    		
+    		incomeList.add(newIncome);
+    	}
+    	
+    	return incomeList;
     }
 }

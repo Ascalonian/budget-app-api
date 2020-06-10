@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.majicode.budgetapp.entity.Income;
+import com.majicode.budgetapp.entity.IncomeData;
 import com.majicode.budgetapp.repository.IncomeRepository;
 
 /**
@@ -29,10 +28,10 @@ public class IncomeService {
 	 * 
 	 * @return list of Incomes
 	 */
-	public List<Income> getIncomes() {
-		final Iterable<Income> incomes = incomeRepository.findAll();
+	public List<IncomeData> getIncomes() {
+		final Iterable<IncomeData> incomes = incomeRepository.findAll();
 
-		final List<Income> incomeResults = new ArrayList<>();
+		final List<IncomeData> incomeResults = new ArrayList<>();
 		incomes.forEach(incomeResults::add);
 
 		incomeResults.sort((i1, i2) -> {
@@ -43,6 +42,8 @@ public class IncomeService {
 			return 1;
 		});
 		
+//		final List<IncomeData> incomeResults = incomeRepository.findByOrderByDateCreatedDesc();
+		
 		return incomeResults;
 	}
 
@@ -52,18 +53,18 @@ public class IncomeService {
 	 * @param date when the income was added
 	 * @return list of Income
 	 */
-	public List<Income> getIncomeByDate(final Date date) {
-		final List<Income> incomeResults = new ArrayList<>();
+	public List<IncomeData> getIncomeByDate(final Date date) {
+		final List<IncomeData> incomeResults = new ArrayList<>();
 
-		final Iterable<Income> incomes = incomeRepository.findIncomeByDateCreated(new java.sql.Date(date.getTime()));
+		final Iterable<IncomeData> incomes = incomeRepository.findIncomeByDateCreated(new java.sql.Date(date.getTime()));
 		incomes.forEach(incomeResults::add);
 
 		return incomeResults;
 	}
 	
-	public Long save(final Income income) {
-		Income savedIncome = incomeRepository.save(income);
+	public String save(final IncomeData income) {
+		final IncomeData savedIncome = incomeRepository.save(income);
 		
-		return savedIncome.getIncomeId();
+		return savedIncome.getIncomeId().toString();
 	}
 }

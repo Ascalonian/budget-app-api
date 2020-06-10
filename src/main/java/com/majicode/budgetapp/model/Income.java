@@ -16,6 +16,9 @@ import org.hibernate.validator.constraints.*;
 @ApiModel(description = "Income information")
 
 public class Income   {
+  @JsonProperty("id")
+  private String id;
+
   @JsonProperty("name")
   private String name;
 
@@ -24,6 +27,32 @@ public class Income   {
 
   @JsonProperty("receivedAmount")
   private Double receivedAmount;
+
+  @JsonProperty("dateCreated")
+  private String dateCreated;
+
+  @JsonProperty("dateUpdated")
+  private String dateUpdated;
+
+  public Income id(String id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+  */
+  @ApiModelProperty(example = "939e02dc-f268-4251-9cd2-6632a5221e64", value = "")
+
+@Size(min=1) 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public Income name(String name) {
     this.name = name;
@@ -86,6 +115,46 @@ public class Income   {
     this.receivedAmount = receivedAmount;
   }
 
+  public Income dateCreated(String dateCreated) {
+    this.dateCreated = dateCreated;
+    return this;
+  }
+
+  /**
+   * Get dateCreated
+   * @return dateCreated
+  */
+  @ApiModelProperty(example = "2020-10-31", value = "")
+
+@Size(min=10) 
+  public String getDateCreated() {
+    return dateCreated;
+  }
+
+  public void setDateCreated(String dateCreated) {
+    this.dateCreated = dateCreated;
+  }
+
+  public Income dateUpdated(String dateUpdated) {
+    this.dateUpdated = dateUpdated;
+    return this;
+  }
+
+  /**
+   * Get dateUpdated
+   * @return dateUpdated
+  */
+  @ApiModelProperty(example = "2020-11-01", value = "")
+
+@Size(min=10) 
+  public String getDateUpdated() {
+    return dateUpdated;
+  }
+
+  public void setDateUpdated(String dateUpdated) {
+    this.dateUpdated = dateUpdated;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -96,14 +165,17 @@ public class Income   {
       return false;
     }
     Income income = (Income) o;
-    return Objects.equals(this.name, income.name) &&
+    return Objects.equals(this.id, income.id) &&
+        Objects.equals(this.name, income.name) &&
         Objects.equals(this.plannedAmount, income.plannedAmount) &&
-        Objects.equals(this.receivedAmount, income.receivedAmount);
+        Objects.equals(this.receivedAmount, income.receivedAmount) &&
+        Objects.equals(this.dateCreated, income.dateCreated) &&
+        Objects.equals(this.dateUpdated, income.dateUpdated);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, plannedAmount, receivedAmount);
+    return Objects.hash(id, name, plannedAmount, receivedAmount, dateCreated, dateUpdated);
   }
 
   @Override
@@ -111,9 +183,12 @@ public class Income   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Income {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    plannedAmount: ").append(toIndentedString(plannedAmount)).append("\n");
     sb.append("    receivedAmount: ").append(toIndentedString(receivedAmount)).append("\n");
+    sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
+    sb.append("    dateUpdated: ").append(toIndentedString(dateUpdated)).append("\n");
     sb.append("}");
     return sb.toString();
   }
