@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # OpenAPI generated API stub
 
@@ -25,3 +26,7 @@ public interface PetClient extends PetApi {
 
 }
 ```
+=======
+# budget-app-api
+The Swagger RESTful Web Services
+>>>>>>> 248f15756eeb2c8370fbd30051d9d2762a61967d
