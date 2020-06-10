@@ -1,0 +1,84 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: MajiCode Budget Application
+  description: A set of API to allow running of the Budget App
+  license:
+    name: MIT
+tags:
+  - name: income
+    description: API for interacting with the incomes
+  - name: group
+    description: API for interacting with groups
+paths:
+  /income:
+    post:
+      tags:
+         - "income"
+      summary: "Create a new Income"
+      description: "Creates a new Income for a specific amount on a given date"
+      operationId: "createIncome"
+      requestBody:
+        description: "Income definition"
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: "#/components/schemas/Income"
+      responses:
+        200:
+          description: Returns ApplicationInstanceUID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  income-id:
+                    type: string
+        400:
+          description: Income information is invalid.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /income/findByDate:
+    get:
+      tags:
+         - "income"
+      summary: "Find income by specific date"
+      operationId: "getIncomeByDate"
+      parameters:
+         - in: "query"
+           name: "date"
+           description: "Date the income was created"
+           required: true
+           schema:
+             type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Income"
+        400:
+          description: "Invalid date provided"
+        404:
+          description: "Income not found"
+components:
+  schemas:
+    Income:
+      type: "object"
+      description: "Income information"
+      properties:
+        name:
+          type: "string"
+          example: "Pentagon paycheck"
+        plannedAmount:
+          type: "number"
+          format: "double"
+          example: 4000.00
+        receivedAmount:
+          type: "number"
+          format: "double"
+          example: 3900.00

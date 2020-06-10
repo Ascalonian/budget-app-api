@@ -1,0 +1,47 @@
+info:
+    app:
+        build-number: '@build.number@'
+        description: Application for retrieving data.
+        name: testApp
+        version: '0.0.1-SNAPSHOT'
+server:
+   context-path: /budget
+   port: 8081
+   error:
+      whitelabel:
+         enable: false
+spring:
+   application:
+      name: budget-app
+   data:
+      jpa:
+         repositories:
+            enabled: true
+   datasource:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:test;
+      username: sa
+      password: sa
+   h2:
+      console:
+         enabled: true
+   jackson:
+      serialization:
+         WRITE_DATES_AS_TIMESTAMPS: false
+   jpa:
+      hibernate:
+         ddl-auto: none
+      properties:
+         hibernate:
+            format_sql: true
+      show-sql: false
+   liquibase:
+      change-log: classpath:/db/changelog/changelog-master.xml
+      enabled: true
+   thymeleaf:
+      enabled: false
+springfox:
+   documentation:
+      swagger:
+         v2:
+            path: /api-docs

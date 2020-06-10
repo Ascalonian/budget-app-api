@@ -1,0 +1,14 @@
+title: Budget App Config
+java8: true
+basePackage: com.majicode.budgetapp
+apiPackage: com.majicode.budgetapp.api
+configPackage: com.majicode.budgetapp.configuration
+modelPackage: com.majicode.budgetapp.model
+dateLibrary: java8-localdatetime
+developerName: Mikey Judd
+developerEmail: judd.michael@gmail.com
+hideGenerationTimestamp: true
+interfaceOnly: true
+useTags: true
+useOptional: true
+performBeanValidation: true

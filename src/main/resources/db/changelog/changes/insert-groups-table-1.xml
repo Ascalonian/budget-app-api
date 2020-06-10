@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    
+    <changeSet id="load-groups-table" author="sa" context="test">
+    	<preConditions onFail="HALT">
+            <tableExists tableName="GROUPS" />
+        </preConditions>
+        
+        <loadData encoding="UTF-8" 
+        	      file="/db/changelog/changes/data/loadGroupData.csv"
+        	      tableName="GROUPS" />
+
+        <comment>Load data into the GROUPS table</comment>
+    </changeSet>
+    
+</databaseChangeLog>    
