@@ -1,6 +1,7 @@
 package com.majicode.budgetapp.entity;
 
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,11 +12,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "INCOME")
-public class Income {
+public class IncomeData {
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long incomeId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID incomeId;
 
 	@Column(name = "NAME")
 	private String name;
@@ -32,11 +33,11 @@ public class Income {
 	@Column(name = "DATE_UPDATED")
 	private Date dateUpdated;
 
-	public long getIncomeId() {
+	public UUID getIncomeId() {
 		return incomeId;
 	}
 
-	public void setIncomeId(long incomeId) {
+	public void setIncomeId(UUID incomeId) {
 		this.incomeId = incomeId;
 	}
 
