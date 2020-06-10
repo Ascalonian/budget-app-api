@@ -21,11 +21,12 @@ paths:
          parameters:
          -  name: limit
             in: query
-            description: How many items to return at one time (max 100)
+            description: How many Incomes to return at one time (max 100)
             required: false
             schema:
                type: integer
                format: int32
+               default: 0
          responses:
             200:
                description: A list of Incomes
@@ -36,7 +37,7 @@ paths:
                         items:
                            $ref: '#/components/schemas/Income'
             default:
-               description: unexpected error
+               description: Unexpected error
                content:
                   application/json:
                      schema:
@@ -45,7 +46,7 @@ paths:
          tags:
          - income
          summary: Add a new income to the budget
-         description: adds a new Income for a specific amount on a given date
+         description: Adds a new Income for a specific amount on a given date
          operationId: addIncome
          requestBody:
             description: Income object that needs to be added to the budget
@@ -56,23 +57,23 @@ paths:
                      $ref: '#/components/schemas/Income'
          responses:
             200:
-               description: Returns ApplicationInstanceUID
+               description: Expected response to a valid request
                content:
                   application/json:
                      schema:
-                        type: object
-                        properties:
-                           income-id:
-                              type: string
+                        $ref: '#/components/schemas/Income'
             400:
                description: Income information is invalid.
                content:
-                  text/plain:
+                  application/json:
                      schema:
-                        type: string
+                        $ref: '#/components/schemas/Error'
             405:
                description: Invalid input
-               content: {}
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
       put:
          tags:
          - income
@@ -88,13 +89,22 @@ paths:
          responses:
             400:
                description: Invalid ID supplied
-               content: {}
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
             404:
                description: Income not found
-               content: {}
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
             405:
                description: Validation exception
-               content: {}
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
    /income/{incomeId}:
       get:
          tags:
@@ -137,8 +147,16 @@ paths:
                         $ref: '#/components/schemas/Income'
             400:
                description: Invalid date provided
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
             404:
                description: Income not found
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
 components:
    schemas:
       Income:
@@ -147,6 +165,10 @@ components:
          required:
          - name
          properties:
+            id:
+               type: string
+               minLength: 1
+               example: 939e02dc-f268-4251-9cd2-6632a5221e64
             name:
                type: string
                minLength: 1
@@ -154,11 +176,19 @@ components:
             plannedAmount:
                type: number
                format: double
-               example: 4000.0
+               example: 4000.00
             receivedAmount:
                type: number
                format: double
-               example: 3900.0
+               example: 3900.00
+            dateCreated:
+               type: string
+               minLength: 10
+               example: 2020-10-31
+            dateUpdated:
+               type: string
+               minLength: 10
+               example: 2020-11-01
       Error:
          description: Error message sent back
          type: object
