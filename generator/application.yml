@@ -1,8 +1,15 @@
-openapi: 3.0.1
+openapi: 3.0.2
+servers:
+-  url: http://localhost:80801/v1
 info:
+   description: |3-
+      APIs used to populate and run the Majicode Budget App. 
+      
+      This is created using the OpenAPI 3.0 specification.  You can find out more about Swagger at [http://swagger.io](http://swagger.io).
    version: 1.0.0
-   title: MajiCode Budget Application
-   description: A set of API to allow running of the Budget App
+   title: MajiCode Budget Application - OpenAPI 3.0
+   contact:
+      email: judd.michael@gmail.com
    license:
       name: MIT
 tags:
@@ -13,11 +20,11 @@ tags:
 paths:
    /income:
       get:
+         tags:
+         - income
          summary: List all Incomes
          description: Retrieves the full list of all the Incomes in the budget app
          operationId: listIncomes
-         tags:
-         - income
          parameters:
          -  name: limit
             in: query
@@ -78,6 +85,7 @@ paths:
          tags:
          - income
          summary: Update an existing Income
+         description: Update an existing Income
          operationId: updateIncome
          requestBody:
             description: Income object that needs to be updated in the budget
@@ -105,12 +113,33 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Error'
+      delete:
+         tags:
+         - income
+         summary: Delete an Income
+         description: Delete an existing Income from the budget
+         operationId: deleteIncome
+         parameters:
+         -  name: incomeId
+            in: path
+            description: Income id to delete
+            required: true
+            schema:
+               type: string
+               format: uuid
+         responses:
+            404:
+               description: Income not found
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
    /income/{incomeId}:
       get:
          tags:
          - income
          summary: Info for a specific Income
-         operationId: showIncomeById
+         operationId: findIncomeById
          parameters:
          -  name: incomeId
             in: path
@@ -125,6 +154,18 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
+            400:
+               description: Invalid ID provided
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
+            404:
+               description: Income not found
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
    /income/findByDate:
       get:
          tags:
@@ -167,8 +208,7 @@ components:
          properties:
             id:
                type: string
-               minLength: 1
-               example: 939e02dc-f268-4251-9cd2-6632a5221e64
+               format: uuid
             name:
                type: string
                minLength: 1
@@ -176,19 +216,19 @@ components:
             plannedAmount:
                type: number
                format: double
-               example: 4000.00
+               example: 4000.0
             receivedAmount:
                type: number
                format: double
-               example: 3900.00
+               example: 3900.0
             dateCreated:
                type: string
                minLength: 10
-               example: 2020-10-31
+               example: 2020-10-31T00:00:00Z
             dateUpdated:
                type: string
                minLength: 10
-               example: 2020-11-01
+               example: 2020-11-01T00:00:00Z
       Error:
          description: Error message sent back
          type: object
