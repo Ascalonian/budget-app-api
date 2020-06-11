@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
    version: 1.0.0
    title: MajiCode Budget Application - OpenAPI 3.0
@@ -101,11 +101,7 @@ paths:
                      schema:
                         $ref: '#/components/schemas/Error'
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
             405:
                description: Validation exception
                content:
@@ -128,11 +124,7 @@ paths:
                format: uuid
          responses:
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
    /income/{incomeId}:
       get:
          tags:
@@ -160,11 +152,7 @@ paths:
                      schema:
                         $ref: '#/components/schemas/Error'
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
    /income/findByDate:
       get:
          tags:
@@ -192,11 +180,7 @@ paths:
                      schema:
                         $ref: '#/components/schemas/Error'
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
 components:
    schemas:
       NewIncome:
@@ -257,3 +241,20 @@ components:
             message:
                type: string
                minLength: 1
+   parameters:
+      limitParam:
+         name: limit
+         in: query
+         description: Max records to return
+         required: false
+         schema:
+           type: integer
+           format: int32
+           default: 0
+   responses:
+      NotFound:
+         description: The specified resource was not found
+         content:
+            application/json:
+               schema:
+                  $ref: '#/components/schemas/Error'
