@@ -44,7 +44,8 @@ public class Income   {
    * Get id
    * @return id
   */
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
 
   @Valid
 
@@ -65,8 +66,7 @@ public class Income   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "Pentagon paycheck", required = true, value = "")
-  @NotNull
+  @ApiModelProperty(example = "Pentagon paycheck", value = "")
 
 @Size(min=1) 
   public String getName() {
@@ -126,7 +126,7 @@ public class Income   {
    * Get dateCreated
    * @return dateCreated
   */
-  @ApiModelProperty(example = "2020-10-31T00:00:00Z", value = "")
+  @ApiModelProperty(value = "")
 
 
   public String getDateCreated() {
@@ -146,7 +146,7 @@ public class Income   {
    * Get dateUpdated
    * @return dateUpdated
   */
-  @ApiModelProperty(example = "2020-11-01T00:00:00Z", value = "")
+  @ApiModelProperty(value = "")
 
 
   public String getDateUpdated() {
