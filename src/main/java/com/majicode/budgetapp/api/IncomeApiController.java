@@ -26,6 +26,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import com.majicode.budgetapp.entity.IncomeData;
 import com.majicode.budgetapp.model.Error;
 import com.majicode.budgetapp.model.Income;
+import com.majicode.budgetapp.model.NewIncome;
 import com.majicode.budgetapp.repository.IncomeRepository;
 import com.majicode.budgetapp.util.DateUtils;
 
@@ -53,7 +54,7 @@ public class IncomeApiController implements IncomeApi {
     }
     
     @Override
-    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
+    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody NewIncome income) {
     	logger.info(">>> addIncome");
     	
     	logger.debug("Income data:");

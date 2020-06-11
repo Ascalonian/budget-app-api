@@ -7,6 +7,7 @@ package com.majicode.budgetapp.api;
 
 import com.majicode.budgetapp.model.Error;
 import com.majicode.budgetapp.model.Income;
+import com.majicode.budgetapp.model.NewIncome;
 import java.util.UUID;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public interface IncomeApi {
      * POST /income : Add a new income to the budget
      * Adds a new Income for a specific amount on a given date
      *
-     * @param income Income object that needs to be added to the budget (required)
+     * @param newIncome Income object that needs to be added to the budget (required)
      * @return Expected response to a valid request (status code 200)
      *         or Income information is invalid. (status code 400)
      *         or Invalid input (status code 405)
@@ -56,11 +57,11 @@ public interface IncomeApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<Income> addIncome(@ApiParam(value = "Income object that needs to be added to the budget" ,required=true )  @Valid @RequestBody Income income) {
+    default ResponseEntity<Income> addIncome(@ApiParam(value = "Income object that needs to be added to the budget" ,required=true )  @Valid @RequestBody NewIncome newIncome) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
+                    String exampleString = "{ \"dateCreated\" : \"dateCreated\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"dateUpdated\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -110,7 +111,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
+                    String exampleString = "{ \"dateCreated\" : \"dateCreated\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"dateUpdated\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -141,7 +142,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
+                    String exampleString = "{ \"dateCreated\" : \"dateCreated\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"dateUpdated\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -171,7 +172,7 @@ public interface IncomeApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2020-10-31T00:00:00Z\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"2020-11-01T00:00:00Z\" }";
+                    String exampleString = "{ \"dateCreated\" : \"dateCreated\", \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0, \"dateUpdated\" : \"dateUpdated\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
