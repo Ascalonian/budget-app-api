@@ -77,11 +77,11 @@ public interface IncomeApi {
      * Delete an existing Income from the budget
      *
      * @param incomeId Income id to delete (required)
-     * @return Income not found (status code 404)
+     * @return The specified resource was not found (status code 404)
      */
     @ApiOperation(value = "Delete an Income", nickname = "deleteIncome", notes = "Delete an existing Income from the budget", tags={ "income", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
     @RequestMapping(value = "/income",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
@@ -97,13 +97,13 @@ public interface IncomeApi {
      * @param date Date the income was created (required)
      * @return successful operation (status code 200)
      *         or Invalid date provided (status code 400)
-     *         or Income not found (status code 404)
+     *         or The specified resource was not found (status code 404)
      */
     @ApiOperation(value = "Find income by specific date", nickname = "findIncomeByDate", notes = "", response = Income.class, tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation", response = Income.class),
         @ApiResponse(code = 400, message = "Invalid date provided", response = Error.class),
-        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
     @RequestMapping(value = "/income/findByDate",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -128,13 +128,13 @@ public interface IncomeApi {
      * @param incomeId The id of the income to retrieve (required)
      * @return Expected response to a valid request (status code 200)
      *         or Invalid ID provided (status code 400)
-     *         or Income not found (status code 404)
+     *         or The specified resource was not found (status code 404)
      */
     @ApiOperation(value = "Info for a specific Income", nickname = "findIncomeById", notes = "", response = Income.class, tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class),
         @ApiResponse(code = 400, message = "Invalid ID provided", response = Error.class),
-        @ApiResponse(code = 404, message = "Income not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
     @RequestMapping(value = "/income/{incomeId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -189,13 +189,13 @@ public interface IncomeApi {
      *
      * @param income Income object that needs to be updated in the budget (required)
      * @return Invalid ID supplied (status code 400)
-     *         or Income not found (status code 404)
+     *         or The specified resource was not found (status code 404)
      *         or Validation exception (status code 405)
      */
     @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "Update an existing Income", tags={ "income", })
     @ApiResponses(value = { 
         @ApiResponse(code = 400, message = "Invalid ID supplied", response = Error.class),
-        @ApiResponse(code = 404, message = "Income not found", response = Error.class),
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
         @ApiResponse(code = 405, message = "Validation exception", response = Error.class) })
     @RequestMapping(value = "/income",
         produces = { "application/json" }, 

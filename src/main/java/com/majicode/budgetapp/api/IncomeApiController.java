@@ -160,7 +160,7 @@ public class IncomeApiController implements IncomeApi {
     }
     
     @Override
-    public ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many items to return at one time (max 100)") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
+    public ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many Incomes to return at one time (max 100)", defaultValue = "0") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
     	logger.info(">>> listIncomes");
     	
     	logger.debug("Parameters:");
