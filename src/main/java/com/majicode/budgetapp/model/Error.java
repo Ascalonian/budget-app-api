@@ -19,9 +19,6 @@ public class Error   {
   @JsonProperty("code")
   private Integer code;
 
-  @JsonProperty("type")
-  private String type;
-
   @JsonProperty("message")
   private String message;
 
@@ -44,27 +41,6 @@ public class Error   {
 
   public void setCode(Integer code) {
     this.code = code;
-  }
-
-  public Error type(String type) {
-    this.type = type;
-    return this;
-  }
-
-  /**
-   * Get type
-   * @return type
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-@Size(min=1) 
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
   }
 
   public Error message(String message) {
@@ -99,13 +75,12 @@ public class Error   {
     }
     Error error = (Error) o;
     return Objects.equals(this.code, error.code) &&
-        Objects.equals(this.type, error.type) &&
         Objects.equals(this.message, error.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, type, message);
+    return Objects.hash(code, message);
   }
 
   @Override
@@ -114,7 +89,6 @@ public class Error   {
     sb.append("class Error {\n");
     
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
