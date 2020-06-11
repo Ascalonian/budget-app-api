@@ -1,17 +1,16 @@
 openapi: 3.0.2
-servers:
--  url: http://localhost:80801/v1
 info:
-   description: |3-
-      APIs used to populate and run the Majicode Budget App. 
-      
-      This is created using the OpenAPI 3.0 specification.  You can find out more about Swagger at [http://swagger.io](http://swagger.io).
    version: 1.0.0
    title: MajiCode Budget Application - OpenAPI 3.0
+   description: "APIs used to populate and run the Majicode Budget App. \n\nThis is created using the OpenAPI 3.0 specification.\
+      \  You can find out more about Swagger at [http://swagger.io](http://swagger.io).\n"
    contact:
+      name: Michael Judd
       email: judd.michael@gmail.com
    license:
       name: MIT
+servers:
+-  url: http://localhost:80801/api
 tags:
 -  name: income
    description: API for interacting with the incomes
@@ -61,7 +60,7 @@ paths:
             content:
                application/json:
                   schema:
-                     $ref: '#/components/schemas/Income'
+                     $ref: '#/components/schemas/NewIncome'
          responses:
             200:
                description: Expected response to a valid request
@@ -200,15 +199,33 @@ paths:
                         $ref: '#/components/schemas/Error'
 components:
    schemas:
-      Income:
-         description: Income information
+      NewIncome:
          type: object
          required:
          - name
          properties:
+            name:
+               type: string
+               minLength: 1
+               example: Pentagon paycheck
+            plannedAmount:
+               type: number
+               format: double
+               example: 4000.0
+            receivedAmount:
+               type: number
+               format: double
+               example: 3900.0
+      Income:
+         type: object
+         description: Income information
+         required:
+         - id
+         properties:
             id:
                type: string
                format: uuid
+               example: ''
             name:
                type: string
                minLength: 1
@@ -223,24 +240,20 @@ components:
                example: 3900.0
             dateCreated:
                type: string
-               example: 2020-10-31T00:00:00Z
+               example: ''
             dateUpdated:
                type: string
-               example: 2020-11-01T00:00:00Z
+               example: ''
       Error:
          description: Error message sent back
          type: object
          required:
          - code
-         - type
          - message
          properties:
             code:
                type: integer
                format: int32
-            type:
-               type: string
-               minLength: 1
             message:
                type: string
                minLength: 1
