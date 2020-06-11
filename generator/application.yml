@@ -25,14 +25,7 @@ paths:
          description: Retrieves the full list of all the Incomes in the budget app
          operationId: listIncomes
          parameters:
-         -  name: limit
-            in: query
-            description: How many Incomes to return at one time (max 100)
-            required: false
-            schema:
-               type: integer
-               format: int32
-               default: 0
+         -  $ref: '#/components/parameters/limitParam'
          responses:
             200:
                description: A list of Incomes

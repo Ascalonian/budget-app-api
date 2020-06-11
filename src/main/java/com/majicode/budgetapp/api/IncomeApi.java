@@ -157,7 +157,7 @@ public interface IncomeApi {
      * GET /income : List all Incomes
      * Retrieves the full list of all the Incomes in the budget app
      *
-     * @param limit How many Incomes to return at one time (max 100) (optional, default to 0)
+     * @param limit Max records to return (optional, default to 0)
      * @return A list of Incomes (status code 200)
      *         or Unexpected error (status code 200)
      */
@@ -168,7 +168,7 @@ public interface IncomeApi {
     @RequestMapping(value = "/income",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "How many Incomes to return at one time (max 100)", defaultValue = "0") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
+    default ResponseEntity<List<Income>> listIncomes(@ApiParam(value = "Max records to return", defaultValue = "0") @Valid @RequestParam(value = "limit", required = false, defaultValue="0") Optional<Integer> limit) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
