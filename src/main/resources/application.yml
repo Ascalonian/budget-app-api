@@ -1,8 +1,8 @@
 info:
     app:
         build-number: '@build.number@'
-        description: Application for retrieving data.
-        name: testApp
+        description: API endpoints for the Budget Application
+        name: Budget App API
         version: '@project.version@'
 server:
    context-path: /budget
@@ -10,6 +10,11 @@ server:
    error:
       whitelabel:
          enable: false
+   ssl:
+      key-store: classpath:majicode.p12
+      key-store-password: password$123
+      key-store-type: PKCS12
+      key-alias: majicode
 spring:
    application:
       name: budget-app
@@ -45,3 +50,16 @@ springfox:
       swagger:
          v2:
             path: /api-docs
+management:
+   security:
+      enabled: false
+---
+spring:
+   profiles: dev
+server:
+   port: 8081
+---
+spring:
+   profiles: test
+server:
+   port: 8082
