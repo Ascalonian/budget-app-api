@@ -29,12 +29,6 @@ public class Income   {
   @JsonProperty("receivedAmount")
   private Double receivedAmount;
 
-  @JsonProperty("dateCreated")
-  private String dateCreated;
-
-  @JsonProperty("dateUpdated")
-  private String dateUpdated;
-
   public Income id(UUID id) {
     this.id = id;
     return this;
@@ -66,7 +60,8 @@ public class Income   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "Pentagon paycheck", value = "")
+  @ApiModelProperty(example = "Pentagon paycheck", required = true, value = "")
+  @NotNull
 
 @Size(min=1) 
   public String getName() {
@@ -117,46 +112,6 @@ public class Income   {
     this.receivedAmount = receivedAmount;
   }
 
-  public Income dateCreated(String dateCreated) {
-    this.dateCreated = dateCreated;
-    return this;
-  }
-
-  /**
-   * Get dateCreated
-   * @return dateCreated
-  */
-  @ApiModelProperty(value = "")
-
-
-  public String getDateCreated() {
-    return dateCreated;
-  }
-
-  public void setDateCreated(String dateCreated) {
-    this.dateCreated = dateCreated;
-  }
-
-  public Income dateUpdated(String dateUpdated) {
-    this.dateUpdated = dateUpdated;
-    return this;
-  }
-
-  /**
-   * Get dateUpdated
-   * @return dateUpdated
-  */
-  @ApiModelProperty(value = "")
-
-
-  public String getDateUpdated() {
-    return dateUpdated;
-  }
-
-  public void setDateUpdated(String dateUpdated) {
-    this.dateUpdated = dateUpdated;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -170,14 +125,12 @@ public class Income   {
     return Objects.equals(this.id, income.id) &&
         Objects.equals(this.name, income.name) &&
         Objects.equals(this.plannedAmount, income.plannedAmount) &&
-        Objects.equals(this.receivedAmount, income.receivedAmount) &&
-        Objects.equals(this.dateCreated, income.dateCreated) &&
-        Objects.equals(this.dateUpdated, income.dateUpdated);
+        Objects.equals(this.receivedAmount, income.receivedAmount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, plannedAmount, receivedAmount, dateCreated, dateUpdated);
+    return Objects.hash(id, name, plannedAmount, receivedAmount);
   }
 
   @Override
@@ -189,8 +142,6 @@ public class Income   {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    plannedAmount: ").append(toIndentedString(plannedAmount)).append("\n");
     sb.append("    receivedAmount: ").append(toIndentedString(receivedAmount)).append("\n");
-    sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
-    sb.append("    dateUpdated: ").append(toIndentedString(dateUpdated)).append("\n");
     sb.append("}");
     return sb.toString();
   }
