@@ -12,15 +12,15 @@ info:
 servers:
 -  url: http://localhost:80801/api
 tags:
--  name: income
+-  name: incomes
    description: API for interacting with the incomes
--  name: group
+-  name: groups
    description: API for interacting with groups
 paths:
-   /income:
+   /incomes:
       get:
          tags:
-         - income
+         - incomes
          summary: List all Incomes
          description: Retrieves the full list of all the Incomes in the budget app
          operationId: listIncomes
@@ -43,7 +43,7 @@ paths:
                         $ref: '#/components/schemas/Error'
       post:
          tags:
-         - income
+         - incomes
          summary: Add a new income to the budget
          description: Adds a new Income for a specific amount on a given date
          operationId: addIncome
@@ -53,7 +53,7 @@ paths:
             content:
                application/json:
                   schema:
-                     $ref: '#/components/schemas/NewIncome'
+                     $ref: '#/components/schemas/Income'
          responses:
             200:
                description: Expected response to a valid request
@@ -75,7 +75,7 @@ paths:
                         $ref: '#/components/schemas/Error'
       put:
          tags:
-         - income
+         - incomes
          summary: Update an existing Income
          description: Update an existing Income
          operationId: updateIncome
@@ -103,7 +103,7 @@ paths:
                         $ref: '#/components/schemas/Error'
       delete:
          tags:
-         - income
+         - incomes
          summary: Delete an Income
          description: Delete an existing Income from the budget
          operationId: deleteIncome
@@ -118,10 +118,10 @@ paths:
          responses:
             404:
                $ref: '#/components/responses/NotFound'
-   /income/{incomeId}:
+   /incomes/{incomeId}:
       get:
          tags:
-         - income
+         - incomes
          summary: Info for a specific Income
          operationId: findIncomeById
          parameters:
@@ -146,10 +146,10 @@ paths:
                         $ref: '#/components/schemas/Error'
             404:
                $ref: '#/components/responses/NotFound'
-   /income/findByDate:
+   /incomes/findByDate:
       get:
          tags:
-         - income
+         - incomes
          summary: Find income by specific date
          operationId: findIncomeByDate
          parameters:
@@ -176,51 +176,46 @@ paths:
                $ref: '#/components/responses/NotFound'
 components:
    schemas:
-      NewIncome:
-         type: object
-         required:
-         - name
-         properties:
-            name:
-               type: string
-               minLength: 1
-               example: Pentagon paycheck
-            plannedAmount:
-               type: number
-               format: double
-               example: 4000.0
-            receivedAmount:
-               type: number
-               format: double
-               example: 3900.0
       Income:
          type: object
          description: Income information
          required:
          - id
+         - name
          properties:
             id:
                type: string
                format: uuid
-               example: ''
+               example: ""
             name:
                type: string
                minLength: 1
-               example: Pentagon paycheck
+               example: "Pentagon paycheck"
             plannedAmount:
                type: number
                format: double
-               example: 4000.0
+               example: 4000.00
             receivedAmount:
                type: number
                format: double
-               example: 3900.0
-            dateCreated:
+               example: 3900.00
+      PayPeriodType:
+         type: object
+         description: Pay period type information
+         required:
+         - id
+         - type
+         properties:
+            id:
                type: string
-               example: ''
-            dateUpdated:
+               format: uuid
+               example: ""
+            type:
                type: string
-               example: ''
+               example: "monthly"
+               enum:
+               - weekly
+               - monthly
       Error:
          description: Error message sent back
          type: object

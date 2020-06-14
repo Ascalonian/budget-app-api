@@ -1,8 +1,6 @@
 package com.majicode.budgetapp.api;
 
 import java.lang.invoke.MethodHandles;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import com.majicode.budgetapp.entity.IncomeData;
 import com.majicode.budgetapp.model.Error;
 import com.majicode.budgetapp.model.Income;
-import com.majicode.budgetapp.model.NewIncome;
 import com.majicode.budgetapp.repository.IncomeRepository;
 import com.majicode.budgetapp.util.DateUtils;
 
@@ -34,8 +31,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 
 @Controller
-@Api(tags = {"income"})
-public class IncomeApiController implements IncomeApi {
+@Api(tags = {"incomes"})
+public class IncomesApiController implements IncomesApi {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
     private final NativeWebRequest request;
@@ -44,7 +41,7 @@ public class IncomeApiController implements IncomeApi {
     private IncomeRepository repository;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public IncomeApiController(NativeWebRequest request) {
+    public IncomesApiController(NativeWebRequest request) {
         this.request = request;
     }
 
@@ -54,7 +51,7 @@ public class IncomeApiController implements IncomeApi {
     }
     
     @Override
-    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody NewIncome income) {
+    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
     	logger.info(">>> addIncome");
     	
     	logger.debug("Income data:");
@@ -224,15 +221,11 @@ public class IncomeApiController implements IncomeApi {
     }
     
     private Income convert(final IncomeData income) {
-    	final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
-    	
     	final Income newIncome = new Income();
     	newIncome.setId(income.getIncomeId());
 		newIncome.setName(income.getName());
 		newIncome.setPlannedAmount(income.getPlannedAmount());
 		newIncome.setReceivedAmount(income.getReceivedAmount());
-		newIncome.setDateCreated(dateFormat.format(income.getDateCreated()));
-		newIncome.setDateUpdated(dateFormat.format(income.getDateUpdated()));
 		
 		return newIncome;
     }
