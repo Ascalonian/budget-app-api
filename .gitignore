@@ -32,3 +32,4 @@ target/
 
 # Swagger
 .openapi-generator/
+/notes.txt

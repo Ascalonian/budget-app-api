@@ -5,21 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
 /**
- * Income information
+ * NewIncome
  */
-@ApiModel(description = "Income information")
 
-public class Income   {
-  @JsonProperty("id")
-  private UUID id;
-
+public class NewIncome   {
   @JsonProperty("name")
   private String name;
 
@@ -29,29 +24,7 @@ public class Income   {
   @JsonProperty("receivedAmount")
   private Double receivedAmount;
 
-  public Income id(UUID id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * Get id
-   * @return id
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public Income name(String name) {
+  public NewIncome name(String name) {
     this.name = name;
     return this;
   }
@@ -72,7 +45,7 @@ public class Income   {
     this.name = name;
   }
 
-  public Income plannedAmount(Double plannedAmount) {
+  public NewIncome plannedAmount(Double plannedAmount) {
     this.plannedAmount = plannedAmount;
     return this;
   }
@@ -92,7 +65,7 @@ public class Income   {
     this.plannedAmount = plannedAmount;
   }
 
-  public Income receivedAmount(Double receivedAmount) {
+  public NewIncome receivedAmount(Double receivedAmount) {
     this.receivedAmount = receivedAmount;
     return this;
   }
@@ -121,24 +94,22 @@ public class Income   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Income income = (Income) o;
-    return Objects.equals(this.id, income.id) &&
-        Objects.equals(this.name, income.name) &&
-        Objects.equals(this.plannedAmount, income.plannedAmount) &&
-        Objects.equals(this.receivedAmount, income.receivedAmount);
+    NewIncome newIncome = (NewIncome) o;
+    return Objects.equals(this.name, newIncome.name) &&
+        Objects.equals(this.plannedAmount, newIncome.plannedAmount) &&
+        Objects.equals(this.receivedAmount, newIncome.receivedAmount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, plannedAmount, receivedAmount);
+    return Objects.hash(name, plannedAmount, receivedAmount);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Income {\n");
+    sb.append("class NewIncome {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    plannedAmount: ").append(toIndentedString(plannedAmount)).append("\n");
     sb.append("    receivedAmount: ").append(toIndentedString(receivedAmount)).append("\n");

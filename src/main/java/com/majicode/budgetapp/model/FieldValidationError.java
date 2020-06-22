@@ -11,21 +11,21 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 
 /**
- * Error message sent back
+ * Field validation error
  */
-@ApiModel(description = "Error message sent back")
+@ApiModel(description = "Field validation error")
 
-public class Error   {
+public class FieldValidationError   {
   @JsonProperty("code")
-  private String code;
+  private Integer code;
+
+  @JsonProperty("field")
+  private String field;
 
   @JsonProperty("message")
   private String message;
 
-  @JsonProperty("description")
-  private String description;
-
-  public Error code(String code) {
+  public FieldValidationError code(Integer code) {
     this.code = code;
     return this;
   }
@@ -37,16 +37,37 @@ public class Error   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-@Size(min=1) 
-  public String getCode() {
+
+  public Integer getCode() {
     return code;
   }
 
-  public void setCode(String code) {
+  public void setCode(Integer code) {
     this.code = code;
   }
 
-  public Error message(String message) {
+  public FieldValidationError field(String field) {
+    this.field = field;
+    return this;
+  }
+
+  /**
+   * Get field
+   * @return field
+  */
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+@Size(min=1) 
+  public String getField() {
+    return field;
+  }
+
+  public void setField(String field) {
+    this.field = field;
+  }
+
+  public FieldValidationError message(String message) {
     this.message = message;
     return this;
   }
@@ -67,26 +88,6 @@ public class Error   {
     this.message = message;
   }
 
-  public Error description(String description) {
-    this.description = description;
-    return this;
-  }
-
-  /**
-   * Get description
-   * @return description
-  */
-  @ApiModelProperty(value = "")
-
-@Size(min=1) 
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -96,25 +97,25 @@ public class Error   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Error error = (Error) o;
-    return Objects.equals(this.code, error.code) &&
-        Objects.equals(this.message, error.message) &&
-        Objects.equals(this.description, error.description);
+    FieldValidationError fieldValidationError = (FieldValidationError) o;
+    return Objects.equals(this.code, fieldValidationError.code) &&
+        Objects.equals(this.field, fieldValidationError.field) &&
+        Objects.equals(this.message, fieldValidationError.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message, description);
+    return Objects.hash(code, field, message);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Error {\n");
+    sb.append("class FieldValidationError {\n");
     
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    field: ").append(toIndentedString(field)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

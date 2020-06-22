@@ -1,32 +1,31 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
    version: 1.0.0
-   title: MajiCode Budget Application
-   description: A set of API to allow running of the Budget App
+   title: MajiCode Budget Application - OpenAPI 3.0
+   description: "APIs used to populate and run the Majicode Budget App. \n\nThis is created using the OpenAPI 3.0 specification.\
+      \  You can find out more about Swagger at [http://swagger.io](http://swagger.io).\n"
+   contact:
+      name: Michael Judd
+      email: judd.michael@gmail.com
    license:
       name: MIT
+servers:
+-  url: http://localhost:80801/api
 tags:
--  name: income
+-  name: incomes
    description: API for interacting with the incomes
--  name: group
+-  name: groups
    description: API for interacting with groups
 paths:
-   /income:
+   /incomes:
       get:
+         tags:
+         - incomes
          summary: List all Incomes
          description: Retrieves the full list of all the Incomes in the budget app
          operationId: listIncomes
-         tags:
-         - income
          parameters:
-         -  name: limit
-            in: query
-            description: How many Incomes to return at one time (max 100)
-            required: false
-            schema:
-               type: integer
-               format: int32
-               default: 0
+         -  $ref: '#/components/parameters/limitParam'
          responses:
             200:
                description: A list of Incomes
@@ -44,7 +43,7 @@ paths:
                         $ref: '#/components/schemas/Error'
       post:
          tags:
-         - income
+         - incomes
          summary: Add a new income to the budget
          description: Adds a new Income for a specific amount on a given date
          operationId: addIncome
@@ -56,7 +55,7 @@ paths:
                   schema:
                      $ref: '#/components/schemas/Income'
          responses:
-            200:
+            201:
                description: Expected response to a valid request
                content:
                   application/json:
@@ -76,8 +75,9 @@ paths:
                         $ref: '#/components/schemas/Error'
       put:
          tags:
-         - income
+         - incomes
          summary: Update an existing Income
+         description: Update an existing Income
          operationId: updateIncome
          requestBody:
             description: Income object that needs to be updated in the budget
@@ -87,6 +87,12 @@ paths:
                   schema:
                      $ref: '#/components/schemas/Income'
          responses:
+            200:
+               description: Successfully updated Income
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Income'
             400:
                description: Invalid ID supplied
                content:
@@ -94,23 +100,19 @@ paths:
                      schema:
                         $ref: '#/components/schemas/Error'
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
             405:
                description: Validation exception
                content:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Error'
-   /income/{incomeId}:
+   /incomes/{incomeId}:
       get:
          tags:
-         - income
+         - incomes
          summary: Info for a specific Income
-         operationId: showIncomeById
+         operationId: findIncomeById
          parameters:
          -  name: incomeId
             in: path
@@ -125,10 +127,38 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
-   /income/findByDate:
+            400:
+               description: Invalid ID provided
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#/components/schemas/Error'
+            404:
+               $ref: '#/components/responses/NotFound'
+      delete:
+         tags:
+         - incomes
+         summary: Delete an Income
+         description: Delete an existing Income from the budget
+         operationId: deleteIncome
+         parameters:
+         -  name: incomeId
+            in: path
+            description: Income id to delete
+            required: true
+            schema:
+               type: string
+               format: uuid
+         responses:
+            204:
+               description: Income successfully deleted
+               content: {}
+            404:
+               $ref: '#/components/responses/NotFound'
+   /incomes/findByDate:
       get:
          tags:
-         - income
+         - incomes
          summary: Find income by specific date
          operationId: findIncomeByDate
          parameters:
@@ -152,27 +182,24 @@ paths:
                      schema:
                         $ref: '#/components/schemas/Error'
             404:
-               description: Income not found
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/responses/NotFound'
 components:
    schemas:
       Income:
-         description: Income information
          type: object
+         description: Income information
          required:
+         - id
          - name
          properties:
             id:
                type: string
-               minLength: 1
-               example: 939e02dc-f268-4251-9cd2-6632a5221e64
+               format: uuid
+               example: ""
             name:
                type: string
                minLength: 1
-               example: Pentagon paycheck
+               example: "Pentagon paycheck"
             plannedAmount:
                type: number
                format: double
@@ -181,28 +208,88 @@ components:
                type: number
                format: double
                example: 3900.00
-            dateCreated:
+      PayPeriodType:
+         type: object
+         description: Pay period type information
+         required:
+         - id
+         - type
+         properties:
+            id:
                type: string
-               minLength: 10
-               example: 2020-10-31
-            dateUpdated:
+               format: uuid
+               example: ""
+            type:
                type: string
-               minLength: 10
-               example: 2020-11-01
+               example: "monthly"
+               enum:
+               - weekly
+               - monthly
       Error:
          description: Error message sent back
          type: object
          required:
          - code
-         - type
          - message
          properties:
             code:
-               type: integer
-               format: int32
-            type:
                type: string
                minLength: 1
             message:
                type: string
                minLength: 1
+            description:
+               type: string
+               minLength: 1
+      FieldValidationError:
+         type: object
+         description: Field validation error
+         required:
+         - code
+         - field
+         - message
+         properties:
+            code:
+               type: integer
+               format: int32
+            field:
+               type: string
+               minLength: 1
+            message:
+               type: string
+               minLength: 1
+      FieldValidationErrors:
+         description: A list of field validation errors
+         type: object
+         required:
+         - code
+         - message
+         - errors
+         properties:
+            code:
+               type: integer
+               format: int32
+            message:
+               type: string
+               minLength: 1
+            errors:
+               type: array
+               items:
+                  $ref: '#/components/schemas/FieldValidationError'
+   parameters:
+      limitParam:
+         name: limit
+         in: query
+         description: Max records to return
+         required: false
+         schema:
+           type: integer
+           format: int32
+           default: 0
+   responses:
+      NotFound:
+         description: The specified resource was not found
+         content:
+            application/json:
+               schema:
+                  $ref: '#/components/schemas/Error'

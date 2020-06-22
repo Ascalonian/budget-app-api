@@ -1,6 +1,16 @@
 # Budget App API
 This is the set of APIs to interact with the different portions of the Budget App.
 
+## Technology Used
+**Swagger** is used to generate and document the RESTful APIs used. The code generation definitions and config are located in the **generator** folder.
+To generate the code, simply run the `gen.sh` script.
+
+Information is stored in the in-memory database of **H2**
+
+Database schema management and initial data loading is done using **Liquibase**. This is located in the _resources/db_ section.
+
+Whole application is running using **Spring Boot**
+
 ## Brief explanation of App
 This app is a combination of a normal budget app, mixed with EveryDollar format and then using David Ramsey's envelope system
 
