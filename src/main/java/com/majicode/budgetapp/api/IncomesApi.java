@@ -43,13 +43,13 @@ public interface IncomesApi {
      * Adds a new Income for a specific amount on a given date
      *
      * @param income Income object that needs to be added to the budget (required)
-     * @return Expected response to a valid request (status code 200)
+     * @return Expected response to a valid request (status code 201)
      *         or Income information is invalid. (status code 400)
      *         or Invalid input (status code 405)
      */
     @ApiOperation(value = "Add a new income to the budget", nickname = "addIncome", notes = "Adds a new Income for a specific amount on a given date", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class),
+        @ApiResponse(code = 201, message = "Expected response to a valid request", response = Income.class),
         @ApiResponse(code = 400, message = "Income information is invalid.", response = Error.class),
         @ApiResponse(code = 405, message = "Invalid input", response = Error.class) })
     @RequestMapping(value = "/incomes",
@@ -72,16 +72,18 @@ public interface IncomesApi {
 
 
     /**
-     * DELETE /incomes : Delete an Income
+     * DELETE /incomes/{incomeId} : Delete an Income
      * Delete an existing Income from the budget
      *
      * @param incomeId Income id to delete (required)
-     * @return The specified resource was not found (status code 404)
+     * @return Income successfully deleted (status code 204)
+     *         or The specified resource was not found (status code 404)
      */
     @ApiOperation(value = "Delete an Income", nickname = "deleteIncome", notes = "Delete an existing Income from the budget", tags={ "incomes", })
     @ApiResponses(value = { 
+        @ApiResponse(code = 204, message = "Income successfully deleted"),
         @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
-    @RequestMapping(value = "/incomes",
+    @RequestMapping(value = "/incomes/{incomeId}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
     default ResponseEntity<Void> deleteIncome(@ApiParam(value = "Income id to delete",required=true) @PathVariable("incomeId") UUID incomeId) {
@@ -187,12 +189,14 @@ public interface IncomesApi {
      * Update an existing Income
      *
      * @param income Income object that needs to be updated in the budget (required)
-     * @return Invalid ID supplied (status code 400)
+     * @return Successfully updated Income (status code 200)
+     *         or Invalid ID supplied (status code 400)
      *         or The specified resource was not found (status code 404)
      *         or Validation exception (status code 405)
      */
-    @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "Update an existing Income", tags={ "incomes", })
+    @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "Update an existing Income", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Successfully updated Income", response = Income.class),
         @ApiResponse(code = 400, message = "Invalid ID supplied", response = Error.class),
         @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
         @ApiResponse(code = 405, message = "Validation exception", response = Error.class) })
@@ -200,7 +204,16 @@ public interface IncomesApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    default ResponseEntity<Void> updateIncome(@ApiParam(value = "Income object that needs to be updated in the budget" ,required=true )  @Valid @RequestBody Income income) {
+    default ResponseEntity<Income> updateIncome(@ApiParam(value = "Income object that needs to be updated in the budget" ,required=true )  @Valid @RequestBody Income income) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"name\" : \"Pentagon paycheck\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"plannedAmount\" : 4000.0, \"receivedAmount\" : 3900.0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
