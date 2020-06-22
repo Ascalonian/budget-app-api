@@ -6,6 +6,7 @@
 package com.majicode.budgetapp.api;
 
 import com.majicode.budgetapp.model.Error;
+import com.majicode.budgetapp.model.FieldValidationError;
 import com.majicode.budgetapp.model.Income;
 import java.util.UUID;
 import io.swagger.annotations.*;
@@ -44,14 +45,14 @@ public interface IncomesApi {
      *
      * @param income Income object that needs to be added to the budget (required)
      * @return Expected response to a valid request (status code 201)
-     *         or Income information is invalid. (status code 400)
-     *         or Invalid input (status code 405)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "Add a new income to the budget", nickname = "addIncome", notes = "Adds a new Income for a specific amount on a given date", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 201, message = "Expected response to a valid request", response = Income.class),
-        @ApiResponse(code = 400, message = "Income information is invalid.", response = Error.class),
-        @ApiResponse(code = 405, message = "Invalid input", response = Error.class) })
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes",
         produces = { "application/json" }, 
         consumes = { "application/json" },
@@ -78,11 +79,15 @@ public interface IncomesApi {
      * @param incomeId Income id to delete (required)
      * @return Income successfully deleted (status code 204)
      *         or The specified resource was not found (status code 404)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "Delete an Income", nickname = "deleteIncome", notes = "Delete an existing Income from the budget", tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "Income successfully deleted"),
-        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes/{incomeId}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
@@ -97,14 +102,16 @@ public interface IncomesApi {
      *
      * @param date Date the income was created (required)
      * @return successful operation (status code 200)
-     *         or Invalid date provided (status code 400)
      *         or The specified resource was not found (status code 404)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "Find income by specific date", nickname = "findIncomeByDate", notes = "", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "successful operation", response = Income.class),
-        @ApiResponse(code = 400, message = "Invalid date provided", response = Error.class),
-        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes/findByDate",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -128,14 +135,16 @@ public interface IncomesApi {
      *
      * @param incomeId The id of the income to retrieve (required)
      * @return Expected response to a valid request (status code 200)
-     *         or Invalid ID provided (status code 400)
      *         or The specified resource was not found (status code 404)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "Info for a specific Income", nickname = "findIncomeById", notes = "", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Expected response to a valid request", response = Income.class),
-        @ApiResponse(code = 400, message = "Invalid ID provided", response = Error.class),
-        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class) })
+        @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes/{incomeId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -160,12 +169,14 @@ public interface IncomesApi {
      *
      * @param limit Max records to return (optional, default to 0)
      * @return A list of Incomes (status code 200)
-     *         or Unexpected error (status code 200)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "List all Incomes", nickname = "listIncomes", notes = "Retrieves the full list of all the Incomes in the budget app", response = Income.class, responseContainer = "List", tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "A list of Incomes", response = Income.class, responseContainer = "List"),
-        @ApiResponse(code = 200, message = "Unexpected error", response = Error.class) })
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -190,16 +201,16 @@ public interface IncomesApi {
      *
      * @param income Income object that needs to be updated in the budget (required)
      * @return Successfully updated Income (status code 200)
-     *         or Invalid ID supplied (status code 400)
      *         or The specified resource was not found (status code 404)
-     *         or Validation exception (status code 405)
+     *         or Input provided is invalid (status code 422)
+     *         or  (status code 200)
      */
     @ApiOperation(value = "Update an existing Income", nickname = "updateIncome", notes = "Update an existing Income", response = Income.class, tags={ "incomes", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Successfully updated Income", response = Income.class),
-        @ApiResponse(code = 400, message = "Invalid ID supplied", response = Error.class),
         @ApiResponse(code = 404, message = "The specified resource was not found", response = Error.class),
-        @ApiResponse(code = 405, message = "Validation exception", response = Error.class) })
+        @ApiResponse(code = 422, message = "Input provided is invalid", response = FieldValidationError.class),
+        @ApiResponse(code = 200, message = "") })
     @RequestMapping(value = "/incomes",
         produces = { "application/json" }, 
         consumes = { "application/json" },

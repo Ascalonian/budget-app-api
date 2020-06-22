@@ -35,12 +35,10 @@ paths:
                         type: array
                         items:
                            $ref: '#/components/schemas/Income'
+            422:
+               $ref: '#/components/responses/InvalidData'
             default:
-               description: Unexpected error
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+               $ref: '#/components/schemas/UnexpectedError'
       post:
          tags:
          - incomes
@@ -61,18 +59,10 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
-            400:
-               description: Income information is invalid.
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
-            405:
-               description: Invalid input
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+            422:
+               $ref: '#/components/responses/InvalidData'
+            default:
+               $ref: '#/components/schemas/UnexpectedError'
       put:
          tags:
          - incomes
@@ -93,20 +83,12 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
-            400:
-               description: Invalid ID supplied
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
             404:
                $ref: '#/components/responses/NotFound'
-            405:
-               description: Validation exception
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
+            422:
+               $ref: '#/components/responses/InvalidData'
+            default:
+               $ref: '#/components/schemas/UnexpectedError'
    /incomes/{incomeId}:
       get:
          tags:
@@ -127,14 +109,12 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
-            400:
-               description: Invalid ID provided
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
             404:
                $ref: '#/components/responses/NotFound'
+            422:
+               $ref: '#/components/responses/InvalidData'
+            default:
+               $ref: '#/components/schemas/UnexpectedError'
       delete:
          tags:
          - incomes
@@ -155,6 +135,10 @@ paths:
                content: {}
             404:
                $ref: '#/components/responses/NotFound'
+            422:
+               $ref: '#/components/responses/InvalidData'
+            default:
+               $ref: '#/components/schemas/UnexpectedError'
    /incomes/findByDate:
       get:
          tags:
@@ -175,14 +159,12 @@ paths:
                   application/json:
                      schema:
                         $ref: '#/components/schemas/Income'
-            400:
-               description: Invalid date provided
-               content:
-                  application/json:
-                     schema:
-                        $ref: '#/components/schemas/Error'
             404:
                $ref: '#/components/responses/NotFound'
+            422:
+               $ref: '#/components/responses/InvalidData'
+            default:
+               $ref: '#/components/schemas/UnexpectedError'
 components:
    schemas:
       Income:
@@ -287,9 +269,21 @@ components:
            format: int32
            default: 0
    responses:
+      UnexpectedError:
+         description: Unexpected error
+         content:
+            application/json:
+               schema:
+                  $ref: '#/components/schemas/Error'
       NotFound:
          description: The specified resource was not found
          content:
             application/json:
                schema:
                   $ref: '#/components/schemas/Error'
+      InvalidData:
+         description: Input provided is invalid
+         content:
+            application/json:
+               schema:
+                  $ref: '#/components/schemas/FieldValidationError'
