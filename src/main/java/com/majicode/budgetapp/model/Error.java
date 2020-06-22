@@ -17,12 +17,15 @@ import org.hibernate.validator.constraints.*;
 
 public class Error   {
   @JsonProperty("code")
-  private Integer code;
+  private String code;
 
   @JsonProperty("message")
   private String message;
 
-  public Error code(Integer code) {
+  @JsonProperty("description")
+  private String description;
+
+  public Error code(String code) {
     this.code = code;
     return this;
   }
@@ -34,12 +37,12 @@ public class Error   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-
-  public Integer getCode() {
+@Size(min=1) 
+  public String getCode() {
     return code;
   }
 
-  public void setCode(Integer code) {
+  public void setCode(String code) {
     this.code = code;
   }
 
@@ -64,6 +67,26 @@ public class Error   {
     this.message = message;
   }
 
+  public Error description(String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+  */
+  @ApiModelProperty(value = "")
+
+@Size(min=1) 
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -75,12 +98,13 @@ public class Error   {
     }
     Error error = (Error) o;
     return Objects.equals(this.code, error.code) &&
-        Objects.equals(this.message, error.message);
+        Objects.equals(this.message, error.message) &&
+        Objects.equals(this.description, error.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message);
+    return Objects.hash(code, message, description);
   }
 
   @Override
@@ -90,6 +114,7 @@ public class Error   {
     
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }
