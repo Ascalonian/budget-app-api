@@ -10,22 +10,22 @@ info:
    license:
       name: MIT
 servers:
--  url: http://localhost:80801/api
+   -  url: http://localhost:8081/api
 tags:
--  name: incomes
-   description: API for interacting with the incomes
--  name: groups
-   description: API for interacting with groups
+   - name: incomes
+     description: API for interacting with the incomes
+   - name: groups
+     description: API for interacting with groups
 paths:
    /incomes:
       get:
          tags:
-         - incomes
+            - incomes
          summary: List all Incomes
          description: Retrieves the full list of all the Incomes in the budget app
          operationId: listIncomes
          parameters:
-         -  $ref: '#/components/parameters/limitParam'
+            -  $ref: '#/components/parameters/limitParam'
          responses:
             200:
                description: A list of Incomes
@@ -38,10 +38,10 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
       post:
          tags:
-         - incomes
+            - incomes
          summary: Add a new income to the budget
          description: Adds a new Income for a specific amount on a given date
          operationId: addIncome
@@ -62,10 +62,10 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
       put:
          tags:
-         - incomes
+            - incomes
          summary: Update an existing Income
          description: Update an existing Income
          operationId: updateIncome
@@ -88,20 +88,20 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
    /incomes/{incomeId}:
       get:
          tags:
-         - incomes
+            - incomes
          summary: Info for a specific Income
          operationId: findIncomeById
          parameters:
-         -  name: incomeId
-            in: path
-            required: true
-            description: The id of the income to retrieve
-            schema:
-               type: string
+            - name: incomeId
+              in: path
+              required: true
+              description: The id of the income to retrieve
+              schema:
+                 type: string
          responses:
             200:
                description: Expected response to a valid request
@@ -114,21 +114,21 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
       delete:
          tags:
-         - incomes
+            - incomes
          summary: Delete an Income
          description: Delete an existing Income from the budget
          operationId: deleteIncome
          parameters:
-         -  name: incomeId
-            in: path
-            description: Income id to delete
-            required: true
-            schema:
-               type: string
-               format: uuid
+            - name: incomeId
+              in: path
+              description: Income id to delete
+              required: true
+              schema:
+                 type: string
+                 format: uuid
          responses:
             204:
                description: Income successfully deleted
@@ -138,20 +138,20 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
    /incomes/findByDate:
       get:
          tags:
-         - incomes
+            - incomes
          summary: Find income by specific date
          operationId: findIncomeByDate
          parameters:
-         -  in: query
-            name: date
-            description: Date the income was created
-            required: true
-            schema:
-               type: string
+            - in: query
+              name: date
+              description: Date the income was created
+              required: true
+              schema:
+                 type: string
          responses:
             200:
                description: successful operation
@@ -164,15 +164,15 @@ paths:
             422:
                $ref: '#/components/responses/InvalidData'
             default:
-               $ref: '#/components/schemas/UnexpectedError'
+               $ref: '#/components/responses/UnexpectedError'
 components:
    schemas:
       Income:
          type: object
          description: Income information
          required:
-         - id
-         - name
+            - id
+            - name
          properties:
             id:
                type: string
@@ -194,8 +194,8 @@ components:
          type: object
          description: Pay period type information
          required:
-         - id
-         - type
+            - id
+            - type
          properties:
             id:
                type: string
@@ -205,14 +205,14 @@ components:
                type: string
                example: "monthly"
                enum:
-               - weekly
-               - monthly
+                  - weekly
+                  - monthly
       Error:
          description: Error message sent back
          type: object
          required:
-         - code
-         - message
+            - code
+            - message
          properties:
             code:
                type: string
@@ -227,9 +227,9 @@ components:
          type: object
          description: Field validation error
          required:
-         - code
-         - field
-         - message
+            - code
+            - field
+            - message
          properties:
             code:
                type: integer
@@ -244,9 +244,9 @@ components:
          description: A list of field validation errors
          type: object
          required:
-         - code
-         - message
-         - errors
+            - code
+            - message
+            - errors
          properties:
             code:
                type: integer
