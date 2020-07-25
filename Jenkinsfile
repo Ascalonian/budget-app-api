@@ -5,7 +5,7 @@ pipeline {
       agent any
       steps {
         echo 'Start building project'
-        sh 'mvn clean install -Dlicense.skip=true'
+        sh 'mvn clean install -Dlicense.skip=true -DskipTests=true'
         echo 'Building finished'
       }
     }
