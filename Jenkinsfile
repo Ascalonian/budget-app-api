@@ -25,4 +25,7 @@ pipeline {
     }
 
   }
+  tools {
+    maven 'maven'
+  }
 }
