@@ -25,6 +25,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import com.majicode.budgetapp.entity.IncomeData;
 import com.majicode.budgetapp.model.Error;
+import com.majicode.budgetapp.model.FieldValidationError;
 import com.majicode.budgetapp.model.Income;
 import com.majicode.budgetapp.repository.IncomeRepository;
 import com.majicode.budgetapp.util.DateUtils;
@@ -61,9 +62,19 @@ public class IncomesApiController implements IncomesApi {
 	                                             __/ |                                        
 	                                            |___/                                         
      */
-    @Override
-    public ResponseEntity<Income> addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+    public ResponseEntity addIncome(@ApiParam(value = "Income definition" ,required=true )  @Valid @RequestBody Income income) {
     	logger.info("Adding a new Income");
+    	
+    	if (income == null) {
+    		final FieldValidationError validationError = new FieldValidationError();
+    		//validationError.setCode("");
+    		validationError.setField("income");
+    		validationError.setMessage("Income is NULL");
+    		
+    		return new ResponseEntity<FieldValidationError>(validationError, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    	}
     	
     	logger.debug("Income data:");
     	logger.debug("Name: {}", income.getName());
