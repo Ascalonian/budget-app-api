@@ -41,7 +41,7 @@ public class WebConfig {
 	}
 
 	private Connector redirectConnector() {
-		final Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+		final Connector connector = new Connector("org.apache.coyote.http2.Http2Protocol");
 		connector.setScheme("http");
 		connector.setPort(8081);
 		connector.setSecure(false);
