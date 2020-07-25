@@ -4,8 +4,18 @@ info:
         description: API endpoints for the Budget Application
         name: Budget App API
         version: '@project.version@'
+keycloak:
+   auth-server-url: http://localhost:8080/auth
+   bearer-only: true
+   credentials.secret: 4aaba11f-72ee-4123-9831-ea5f37a7ebb2
+   realm: Demo-Realm
+   resource: springboot-microservice
+   ssl-required: external
+   use-resource-role-mappings: true
 server:
    context-path: /budget
+   http2:
+      enabled: true
    port: 8081
    error:
       whitelabel:
@@ -43,6 +53,8 @@ spring:
    liquibase:
       change-log: classpath:/db/changelog/changelog-master.xml
       enabled: true
+   mvc:
+      log-request-details: true
    thymeleaf:
       enabled: false
 springfox:
