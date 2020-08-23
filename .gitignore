@@ -30,6 +30,10 @@ target/
 .project
 .settings/
 
+# IntelliJ files
+.idea/
+*.iml
+
 # Swagger
 .openapi-generator/
 /notes.txt
